@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "cases": [
+    {
+      "correlation_id": "evt-001",
+      "tag_id": "A1B2C3D4",
+      "decision": "allow",
+      "reason": "active_subscription",
+      "wash_program": 2,
+      "valid_until": "2026-07-30T02:00:15Z",
+      "decided_at": "2026-07-30T02:00:00Z"
+    },
+    {
+      "correlation_id": "evt-002",
+      "tag_id": "FFEEDDCC",
+      "decision": "deny",
+      "reason": "unknown_tag",
+      "wash_program": null,
+      "valid_until": null,
+      "decided_at": "2026-07-30T02:01:00Z"
+    },
+    {
+      "correlation_id": "evt-003",
+      "tag_id": "A1B2C3D4",
+      "decision": "deny",
+      "reason": "repeat_lockout",
+      "wash_program": null,
+      "valid_until": null,
+      "decided_at": "2026-07-30T02:01:05Z"
+    },
+    {
+      "correlation_id": "evt-004",
+      "tag_id": "11223344",
+      "decision": "deny",
+      "reason": "field_path_unavailable",
+      "wash_program": null,
+      "valid_until": null,
+      "decided_at": "2026-07-30T02:02:00Z"
+    }
+  ]
+}
+

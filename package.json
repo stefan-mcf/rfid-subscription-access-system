@@ -1,0 +1,9 @@
+{
+  "name": "rfid-subscription-access-system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "validate": "node scripts/validate-contracts.mjs"
+  }
+}
+

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RFID access decision",
+  "type": "object",
+  "required": [
+    "correlation_id",
+    "tag_id",
+    "decision",
+    "reason",
+    "decided_at"
+  ],
+  "properties": {
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tag_id": {
+      "type": "string",
+      "pattern": "^[A-F0-9]{8,32}$"
+    },
+    "decision": {
+      "enum": ["allow", "deny"]
+    },
+    "reason": {
+      "enum": [
+        "active_subscription",
+        "unknown_tag",
+        "inactive_subscription",
+        "repeat_lockout",
+        "system_busy",
+        "field_path_unavailable"
+      ]
+    },
+    "wash_program": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 3
+    },
+    "valid_until": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "decided_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}
+

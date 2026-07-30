@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RFID wash event",
+  "type": "object",
+  "required": [
+    "event_id",
+    "correlation_id",
+    "event_type",
+    "occurred_at",
+    "source"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "event_type": {
+      "enum": [
+        "tag_read",
+        "decision_issued",
+        "command_requested",
+        "command_acknowledged",
+        "command_rejected"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "enum": ["reader_edge", "access_api", "plc_bridge", "operator_dashboard"]
+    },
+    "outcome": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}
+

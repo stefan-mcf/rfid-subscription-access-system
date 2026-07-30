@@ -38,4 +38,3 @@ Customer and operator application state can run in AWS, but the reader-to-contro
 ## Publication boundary
 
 Device IP addresses, VPN routes, access tokens, live customer data, payment identifiers, tag values, client configuration and field runbooks are excluded.
-

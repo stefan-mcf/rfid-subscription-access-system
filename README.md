@@ -77,4 +77,3 @@ docs/         architecture and commissioning boundaries
 ```
 
 [Architecture and failure boundaries](docs/architecture.md)
-

@@ -6,4 +6,3 @@
     "validate": "node scripts/validate-contracts.mjs"
   }
 }
-

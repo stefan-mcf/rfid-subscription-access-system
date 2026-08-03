@@ -8,7 +8,7 @@
       "lane": "architecture",
       "width": 1280,
       "height": 960,
-      "sha256": "ddee69e9c731c0357e3d50b8c4a2872cc3df5d90aef0b537e4e2400f0524e593"
+      "sha256": "5f754d6a081662a7fa2f0c9924ef9e82864f9fda8b269fd5ce94b96bb880083a"
     },
     {
       "sequence": 2,
@@ -16,7 +16,7 @@
       "lane": "customer",
       "width": 1280,
       "height": 960,
-      "sha256": "63b07555e0196c3b7c42a6561faf0d23099656d6ab73cd259518fdb6df0f0bf9"
+      "sha256": "30b96701197bf667f6c0f65b992b09ec0ff25161e9325061b8828b218ee0cd7a"
     },
     {
       "sequence": 3,
@@ -24,7 +24,7 @@
       "lane": "customer",
       "width": 1280,
       "height": 960,
-      "sha256": "f56130e8d64ee33b86abbf9a487f5af6913d6a57fe14761e435f8ba757770f44"
+      "sha256": "edcb379d1ca2291a8777af3fc0365cf9c9e5bfec76da08a2785815e1afc9b97d"
     },
     {
       "sequence": 4,
@@ -32,7 +32,7 @@
       "lane": "customer",
       "width": 1280,
       "height": 960,
-      "sha256": "f772d070ff1f1f89bb07dfb6b32f761343fecdf3151dab549b890e3860f613f2"
+      "sha256": "2e84c6cea4b76c46ef8bfbf684c5decd266b41dff9b88a997096606195c69b02"
     },
     {
       "sequence": 5,
@@ -40,7 +40,7 @@
       "lane": "billing",
       "width": 1280,
       "height": 960,
-      "sha256": "f5afaba5278138c63d57cc156d0599d303b076ee6969a35c836da2b4164cfc1a"
+      "sha256": "bfa6c76316dce1512c7a78a4853caa060481e55fd3d92007882aed349a2ff0df"
     },
     {
       "sequence": 6,
@@ -48,7 +48,7 @@
       "lane": "operator",
       "width": 1280,
       "height": 960,
-      "sha256": "af7b50bdd4fc586211a534caa646c16fc834e207bd36d0dac2a1ec92c1023f7a"
+      "sha256": "378f1aabe7a9e28ea46ed6f7a4dffaf74ea9384770684daba3a0d1067b0dda51"
     },
     {
       "sequence": 7,
@@ -56,7 +56,7 @@
       "lane": "operator",
       "width": 1280,
       "height": 960,
-      "sha256": "697602efe4ba8d1ceafec4242a6dba31ff9c795c5cba2430d2b9404415fd8dfd"
+      "sha256": "daddccde15fe3a8ec9795e8ceeb67073c6b96dc18dd0571e7ad8d98bd4a9b90b"
     },
     {
       "sequence": 8,
@@ -64,7 +64,7 @@
       "lane": "operator",
       "width": 1280,
       "height": 960,
-      "sha256": "e8a0b56a96dac9cfde5dce1968f7816c835d592205fc6cf4bfd2b1720f9c2100"
+      "sha256": "7c71516dd6cb39c416c0838f08ab38fca8b7560c687fb798134de2d2858fc81d"
     },
     {
       "sequence": 9,
@@ -72,7 +72,7 @@
       "lane": "cloud",
       "width": 1280,
       "height": 960,
-      "sha256": "c0d138f2641109c76795e7bb938e88890b2a45afe33250b6da89d490ef5e335e"
+      "sha256": "e15a6b8f08d4fd72c51b40c3bd16635c13a842a53788fbebfdb512b444dde4fe"
     }
   ]
 }

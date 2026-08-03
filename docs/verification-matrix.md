@@ -20,7 +20,7 @@
 | Outbox acknowledgement | Duplicate enqueue and repeated acknowledgement tests | Validated | In-memory reference outbox |
 | Dry-run output intent | Suppression and commissioned-live tests | Validated | No equipment command |
 | Customer account surfaces | Controlled application screens | Demonstrated | Personal data removed |
-| Sandbox billing lifecycle | Provider sandbox screens and lifecycle records | Demonstrated | Temporary test pricing only |
+| Sandbox billing lifecycle | Provider sandbox screens and lifecycle records | Demonstrated | Temporary test price only |
 | Operator access and tag controls | Controlled application screens | Demonstrated | Does not establish physical movement |
 | Aurora migration | Runtime, data, backup, idle, resume, and retirement checks | Validated | Observation at acceptance time |
 | Reader and scanner input | Onsite read test | Pending onsite | Physical hardware required |

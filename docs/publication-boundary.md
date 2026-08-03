@@ -25,7 +25,7 @@
 
 ## Commercial boundary
 
-The billing material is sandbox-only and uses temporary test pricing. The repository does not claim live payments, approved production pricing, client revenue, final long-term savings, or production transaction volume.
+The billing material is sandbox-only and uses a temporary test price. The repository does not claim live payments, approved production pricing, client revenue, final long-term savings, or production transaction volume.
 
 ## Physical boundary
 

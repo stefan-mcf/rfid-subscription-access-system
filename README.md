@@ -13,11 +13,11 @@ One connected system carries a customer from verified account and per-vehicle su
 
 The platform gives each layer one job:
 
-- **Customer account:** verified identity, plan selection, vehicle registration, subscription status, tag status, and customer-owned billing access.
-- **Commercial state:** signed lifecycle events are ordered, deduplicated, and reconciled into durable per-vehicle state.
+- **Operator view:** customer context, access decisions, tag setup, runtime health, and wash modes remain observable without implying physical movement.
 - **Access decision:** a tag read returns a short-lived, reason-coded allow or deny result.
 - **Local control:** the edge service retains a SQLite-backed snapshot and outbox, repeat protection, and a bounded output-intent path.
-- **Operator view:** customer context, access decisions, tag setup, runtime health, and wash modes remain observable without implying physical movement.
+- **Customer account:** verified identity, plan selection, vehicle registration, subscription status, tag status, and customer-owned billing access.
+- **Commercial state:** signed lifecycle events are ordered, deduplicated, and reconciled into durable per-vehicle state.
 
 The system deliberately does **not** collapse an active subscription, an eligible access decision, a requested output, and confirmed equipment actuation into one status.
 
@@ -42,6 +42,24 @@ flowchart LR
 
 Commercial eligibility can make a registered tag eligible. A physical command still requires a current decision, the correct operator mode, an available local path, repeat and busy-state gates, and separate field commissioning.
 
+## Deterministic access and operator controls
+
+![Operator and edge access results with customer context and runtime state](assets/06-operator-and-edge-access-decisions.png)
+
+The operator surface brings together allow-or-deny results, subscription tier, wash program, runtime status, and recent events. Stable denial reasons distinguish an unknown tag, inactive subscription, repeat lockout, busy controller, stale decision, and unavailable field path.
+
+![Controlled tag assignment and customer claim lookup](assets/07-tag-assignment-and-claim-lookup.png)
+
+Tag assignment supports customer claim codes and controlled operator activation.
+
+![Wash controls with outputs disabled at the field boundary](assets/08-wash-controls-outputs-disabled.png)
+
+Off, manual, and automatic modes remain separate from the output-intent state, and an intent remains separate from command acknowledgement.
+
+[Local edge and outbox](docs/local-edge-and-outbox.md) · [Field safety and commissioning](docs/field-safety-and-commissioning.md)
+
+These operator and edge controls consume explicit customer and commercial state; they do not infer access from checkout completion or a generic account status.
+
 ## Customer account and subscription state
 
 ![Vehicle and plan selection before checkout](assets/02-vehicle-plan-selection.png)
@@ -64,25 +82,9 @@ The account surface keeps plan, vehicle, subscription, tag, and payment states e
 
 Signed provider events enter an ordered processing path before current state changes. Duplicate delivery is a no-op, older sequence values cannot move the projection backwards, and invalid signatures never enter the state transition path.
 
-The displayed A$1.00 subscription is temporary sandbox pricing. This repository does not claim live payments, approved production pricing, client revenue, or commercial savings.
+The displayed amount is a temporary test price used only in Stripe sandbox. It is not a commercial price. This repository does not claim live payments, approved production pricing, client revenue, or commercial savings.
 
 [Subscription reconciliation](docs/subscription-reconciliation.md)
-
-## Deterministic access and operator controls
-
-![Operator and edge access results with customer context and runtime state](assets/06-operator-and-edge-access-decisions.png)
-
-The operator surface brings together allow-or-deny results, subscription tier, wash program, runtime status, and recent events. Stable denial reasons distinguish an unknown tag, inactive subscription, repeat lockout, busy controller, stale decision, and unavailable field path.
-
-![Controlled tag assignment and customer claim lookup](assets/07-tag-assignment-and-claim-lookup.png)
-
-Tag assignment supports customer claim codes and controlled operator activation.
-
-![Wash controls with outputs disabled at the field boundary](assets/08-wash-controls-outputs-disabled.png)
-
-Off, manual, and automatic modes remain separate from the output-intent state, and an intent remains separate from command acknowledgement.
-
-[Local edge and outbox](docs/local-edge-and-outbox.md) · [Field safety and commissioning](docs/field-safety-and-commissioning.md)
 
 ## Request-driven AWS data layer
 

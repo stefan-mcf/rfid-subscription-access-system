@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.smsystems.au/rfid/tag-snapshot.schema.json",
+  "title": "Full tag entitlement snapshot",
+  "description": "A complete, versioned replacement snapshot distributed to the local edge service.",
+  "type": "object",
+  "required": ["snapshot_id", "snapshot_version", "captured_at", "full_snapshot", "tags"],
+  "properties": {
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^demo-snapshot-[a-z0-9-]{3,80}$"
+    },
+    "snapshot_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "captured_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "full_snapshot": {
+      "const": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "tag_id",
+          "vehicle_ref",
+          "subscription_state",
+          "wash_program",
+          "access_valid_until",
+          "updated_at"
+        ],
+        "properties": {
+          "tag_id": {
+            "type": "string",
+            "pattern": "^[A-F0-9]{8,32}$"
+          },
+          "vehicle_ref": {
+            "type": "string",
+            "pattern": "^vehicle-demo-[a-z0-9-]{3,40}$"
+          },
+          "subscription_state": {
+            "enum": ["active", "inactive", "past_due", "cancelled"]
+          },
+          "wash_program": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "access_valid_until": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

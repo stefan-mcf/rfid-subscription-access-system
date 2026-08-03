@@ -1,0 +1,27 @@
+{
+  "fixture": "synthetic",
+  "schema": "contracts/subscription-state-change.schema.json",
+  "schema_version": "1.0.0",
+  "cases": [
+    {
+      "event_id": "demo-sub-event-001",
+      "provider_event_ref": "provider-demo-event-001",
+      "account_ref": "account-demo-north",
+      "vehicle_ref": "vehicle-demo-hatch",
+      "state": "pending_checkout",
+      "effective_at": "2026-07-30T01:55:00Z",
+      "recorded_at": "2026-07-30T01:55:01Z",
+      "event_sequence": 1
+    },
+    {
+      "event_id": "demo-sub-event-002",
+      "provider_event_ref": "provider-demo-event-002",
+      "account_ref": "account-demo-north",
+      "vehicle_ref": "vehicle-demo-hatch",
+      "state": "active",
+      "effective_at": "2026-07-30T01:59:30Z",
+      "recorded_at": "2026-07-30T01:59:31Z",
+      "event_sequence": 2
+    }
+  ]
+}

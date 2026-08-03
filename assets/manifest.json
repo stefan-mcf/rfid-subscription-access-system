@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "generated_from": "approved-public-frames",
+  "assets": [
+    {
+      "sequence": 1,
+      "file": "01-subscription-to-access-decision.png",
+      "lane": "architecture",
+      "width": 1280,
+      "height": 960,
+      "sha256": "ddee69e9c731c0357e3d50b8c4a2872cc3df5d90aef0b537e4e2400f0524e593"
+    },
+    {
+      "sequence": 2,
+      "file": "02-vehicle-plan-selection.png",
+      "lane": "customer",
+      "width": 1280,
+      "height": 960,
+      "sha256": "63b07555e0196c3b7c42a6561faf0d23099656d6ab73cd259518fdb6df0f0bf9"
+    },
+    {
+      "sequence": 3,
+      "file": "03-vehicle-details-before-checkout.png",
+      "lane": "customer",
+      "width": 1280,
+      "height": 960,
+      "sha256": "f56130e8d64ee33b86abbf9a487f5af6913d6a57fe14761e435f8ba757770f44"
+    },
+    {
+      "sequence": 4,
+      "file": "04-customer-account-and-access-state.png",
+      "lane": "customer",
+      "width": 1280,
+      "height": 960,
+      "sha256": "f772d070ff1f1f89bb07dfb6b32f761343fecdf3151dab549b890e3860f613f2"
+    },
+    {
+      "sequence": 5,
+      "file": "05-stripe-sandbox-billing-state.png",
+      "lane": "billing",
+      "width": 1280,
+      "height": 960,
+      "sha256": "f5afaba5278138c63d57cc156d0599d303b076ee6969a35c836da2b4164cfc1a"
+    },
+    {
+      "sequence": 6,
+      "file": "06-operator-and-edge-access-decisions.png",
+      "lane": "operator",
+      "width": 1280,
+      "height": 960,
+      "sha256": "af7b50bdd4fc586211a534caa646c16fc834e207bd36d0dac2a1ec92c1023f7a"
+    },
+    {
+      "sequence": 7,
+      "file": "07-tag-assignment-and-claim-lookup.png",
+      "lane": "operator",
+      "width": 1280,
+      "height": 960,
+      "sha256": "697602efe4ba8d1ceafec4242a6dba31ff9c795c5cba2430d2b9404415fd8dfd"
+    },
+    {
+      "sequence": 8,
+      "file": "08-wash-controls-outputs-disabled.png",
+      "lane": "operator",
+      "width": 1280,
+      "height": 960,
+      "sha256": "e8a0b56a96dac9cfde5dce1968f7816c835d592205fc6cf4bfd2b1720f9c2100"
+    },
+    {
+      "sequence": 9,
+      "file": "09-aurora-serverless-database-migration.png",
+      "lane": "cloud",
+      "width": 1280,
+      "height": 960,
+      "sha256": "c0d138f2641109c76795e7bb938e88890b2a45afe33250b6da89d490ef5e335e"
+    }
+  ]
+}

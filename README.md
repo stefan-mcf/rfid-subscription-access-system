@@ -1,78 +1,181 @@
 # RFID Subscription and Access Platform
 
-A client system connecting verified customer accounts, per-vehicle subscriptions, Stripe sandbox billing, RFID entitlement decisions, operator controls, and a request-driven AWS data layer.
+One connected system carries a customer from verified account and per-vehicle subscription state to a deterministic RFID allow-or-deny decision, while keeping every equipment command behind a separate local safety boundary.
 
 | | |
 | --- | --- |
-| Status | Client system under staged field commissioning |
-| Role | Application architecture, backend, operator interface, edge integration, cloud migration, and deployment |
-| Stack | .NET, ASP.NET Core, PostgreSQL, Aurora Serverless v2, AWS, Stripe, RFID, OPC UA |
-| Project page | [smsystems.au/work/rfid-subscription-access-system](https://smsystems.au/work/rfid-subscription-access-system/) |
+| Delivery state | Hosted application and local edge path implemented; staged field commissioning remains |
+| Role | Application architecture, backend, customer portal, operator interface, edge integration, cloud migration, and deployment |
+| Stack | .NET 10, ASP.NET Core, PostgreSQL, Aurora Serverless v2, AWS, Stripe sandbox, SQLite, RFID, OPC UA |
+| Public case study | [smsystems.au/work/rfid-subscription-access-system](https://smsystems.au/work/rfid-subscription-access-system/) |
+
+## The operating result
+
+The platform gives each layer one job:
+
+- **Customer account:** verified identity, plan selection, vehicle registration, subscription status, tag status, and customer-owned billing access.
+- **Commercial state:** signed lifecycle events are ordered, deduplicated, and reconciled into durable per-vehicle state.
+- **Access decision:** a tag read returns a short-lived, reason-coded allow or deny result.
+- **Local control:** the edge service retains a SQLite-backed snapshot and outbox, repeat protection, and a bounded output-intent path.
+- **Operator view:** customer context, access decisions, tag setup, runtime health, and wash modes remain observable without implying physical movement.
+
+The system deliberately does **not** collapse an active subscription, an eligible access decision, a requested output, and confirmed equipment actuation into one status.
 
 ## System boundary
 
-![System architecture connecting customer, billing, data, access, and field layers](assets/01-subscription-to-access-decision.png)
+![Customer, subscription, access, edge, operator, and field layers](assets/01-subscription-to-access-decision.png)
 
-The system separates commercial entitlement, access decisions, and physical actuation. A customer subscription can make a registered tag eligible, but a field command remains subject to operator mode, repeat protection, equipment state, and onsite commissioning.
+```mermaid
+flowchart LR
+    customer["Verified customer account"] --> billing["Stripe sandbox lifecycle"]
+    billing --> broker["Ordered event processing"]
+    broker --> state["Aurora PostgreSQL current state"]
+    state --> decision["Access decision API"]
+    reader["Local RFID reader"] --> edge["Local edge service"]
+    edge --> decision
+    decision --> edge
+    edge --> intent["Bounded output intent"]
+    intent --> plc["PLC / CODESYS bridge"]
+    state --> operator["Operator dashboard"]
+    edge --> operator
+```
 
-## Customer plans and vehicle access
+Commercial eligibility can make a registered tag eligible. A physical command still requires a current decision, the correct operator mode, an available local path, repeat and busy-state gates, and separate field commissioning.
 
-![Customer plan selection and verified per-vehicle account states](assets/02-customer-plans-and-vehicle-access.png)
+## Customer account and subscription state
 
-The customer surface supports account verification, plan selection, checkout-session creation, per-vehicle subscription state, tag status, and customer-managed billing actions. Vehicle records remain explicit so an active plan, an unassigned tag, and a payment issue cannot be mistaken for the same operating state.
+![Vehicle and plan selection before checkout](assets/02-vehicle-plan-selection.png)
 
-## Stripe sandbox lifecycle
+The customer starts with a plan selected for one vehicle rather than a detached subscription product.
 
-![Stripe sandbox subscription beside the commissioned lifecycle](assets/03-stripe-sandbox-billing-lifecycle.png)
+![Vehicle details collected before provider checkout](assets/03-vehicle-details-before-checkout.png)
 
-Stripe sandbox Checkout and signed lifecycle events feed an ordered AWS processing path before current subscription state is reconciled into PostgreSQL. Repeated events are handled idempotently and invalid signatures are rejected.
+Vehicle details are bound before the provider handoff, keeping the commercial record attached to the asset that will receive a tag.
 
-The displayed A$1.00 subscription is temporary test pricing. This repository does not claim live payments, approved production pricing, or client revenue.
+![Customer account with explicit plan, vehicle, billing, and access states](assets/04-customer-account-and-access-state.png)
 
-## Operator access decisions
+The account surface keeps plan, vehicle, subscription, tag, and payment states explicit. That prevents an active plan, an unassigned tag, and a payment issue from being presented as the same condition. Billing actions are initiated only from an authenticated account and resolve the provider customer server-side.
 
-![Operator view showing access results, customer context, runtime status, and events](assets/04-operator-access-decisions.png)
+[Customer identity and account boundary](docs/customer-account-security.md)
 
-The operator surface brings together allow-or-deny results, subscription tier, wash program, runtime status, and recent events. Stable denial reasons include unknown tag, inactive subscription, repeat lockout, busy equipment, stale decision, and unavailable field path.
+## Ordered billing reconciliation
 
-## Tag setup and wash control
+![Stripe sandbox subscription beside the ordered reconciliation path](assets/05-stripe-sandbox-billing-state.png)
 
-![Tag assignment and wash-mode controls](assets/05-tag-setup-and-wash-control.png)
+Signed provider events enter an ordered processing path before current state changes. Duplicate delivery is a no-op, older sequence values cannot move the projection backwards, and invalid signatures never enter the state transition path.
 
-Tag assignment supports customer claim codes and controlled operator activation. Wash controls expose off, manual, and automatic modes with output indicators, without treating a dashboard action as confirmation that physical equipment moved.
+The displayed A$1.00 subscription is temporary sandbox pricing. This repository does not claim live payments, approved production pricing, client revenue, or commercial savings.
 
-## Aurora Serverless migration
+[Subscription reconciliation](docs/subscription-reconciliation.md)
 
-![Database architecture before and after the Aurora Serverless migration](assets/06-aurora-serverless-database-migration.png)
+## Deterministic access and operator controls
 
-The live application database was migrated from fixed RDS PostgreSQL to private Aurora Serverless v2. Acceptance checks preserved record counts, observed zero ACU while idle, confirmed post-retirement resume behaviour, and retired the former RDS instance. Long-term savings are not claimed.
+![Operator and edge access results with customer context and runtime state](assets/06-operator-and-edge-access-decisions.png)
 
-## Access decision contract
+The operator surface brings together allow-or-deny results, subscription tier, wash program, runtime status, and recent events. Stable denial reasons distinguish an unknown tag, inactive subscription, repeat lockout, busy controller, stale decision, and unavailable field path.
 
-The public contracts describe the inputs and outputs shared across the reader, edge service, API, and dashboard. They contain no client identifiers, device addresses, credentials, or live tag values.
+![Controlled tag assignment and customer claim lookup](assets/07-tag-assignment-and-claim-lookup.png)
 
-An allowed decision includes a wash program and expiry. A denied decision carries a stable reason so customer state, safety state, and local availability remain distinguishable.
+Tag assignment supports customer claim codes and controlled operator activation.
 
-## Field commissioning boundary
+![Wash controls with outputs disabled at the field boundary](assets/08-wash-controls-outputs-disabled.png)
 
-The hosted application, durable records, billing-event processing, dashboard, and local edge services are implemented. Physical scanner reads, beam state, PLC/CODESYS command acknowledgement, and wash actuation remain separate field acceptance steps because cloud availability cannot establish that machinery moved.
+Off, manual, and automatic modes remain separate from the output-intent state, and an intent remains separate from command acknowledgement.
 
-The full operational source remains private because it contains client configuration, device addressing, and field runbooks. This repository publishes the architecture, interface contracts, controlled examples, and selected screens.
+[Local edge and outbox](docs/local-edge-and-outbox.md) · [Field safety and commissioning](docs/field-safety-and-commissioning.md)
 
-## Validate the public contracts
+## Request-driven AWS data layer
+
+![Database topology before and after the Aurora Serverless migration](assets/09-aurora-serverless-database-migration.png)
+
+The hosted PostgreSQL workload moved from fixed RDS compute to private Aurora Serverless v2. Acceptance checks covered record-count parity, application read and write paths, backup creation, observed zero-ACU idle state, post-retirement resume behaviour, and retirement of the former instance. These checks establish migration and runtime behaviour; they do not establish long-term savings.
+
+[Aurora migration](docs/aurora-migration.md)
+
+## Reliability controls
+
+| Risk | Control | Observable result |
+| --- | --- | --- |
+| Duplicate provider event | Provider event ID plus ordered projection | Duplicate does not advance current state |
+| Out-of-order lifecycle event | Monotonic sequence gate | Older event cannot overwrite a newer state |
+| Unknown or inactive tag | Fail-closed access decision | Stable denial reason; no wash program |
+| Repeated tag read | Per-tag lockout window | Repeat decision is denied |
+| Partial edge connectivity | Full versioned tag snapshot plus local outbox | Local state is explicit; pending delivery remains visible |
+| Duplicate local delivery | Stable message ID and acknowledgement state | Repeated enqueue or acknowledgement is a no-op |
+| Uncommissioned field path | Dry-run output intent | Intent is recorded but actuation is not permitted |
+| Busy or unavailable controller | Local command gate | Commercial eligibility does not bypass field state |
+
+## Public contracts and synthetic fixtures
+
+Seven JSON Schemas describe the public interfaces without client identifiers, network addresses, credentials, payment IDs, or live tag values:
+
+- [Access decision](contracts/access-decision.json)
+- [Wash event](contracts/wash-event.json)
+- [RFID read](contracts/rfid-read.schema.json)
+- [Subscription state change](contracts/subscription-state-change.schema.json)
+- [Full tag snapshot](contracts/tag-snapshot.schema.json)
+- [Local outbox message](contracts/local-outbox.schema.json)
+- [Output intent](contracts/output-intent.schema.json)
+
+Every file under [`examples/`](examples/) is marked `synthetic` and is validated against its declared schema.
+
+## Executable .NET 10 reference model
+
+The small model under [`src/Rfid.ReferenceModel/`](src/Rfid.ReferenceModel/) makes the most important controls executable:
 
 ```bash
-npm run validate
+dotnet run --project src/Rfid.ReferenceModel/Rfid.ReferenceModel.csproj
+dotnet test Rfid.SubscriptionAccess.Reference.slnx
 ```
 
-## Repository contents
+The tests cover:
+
+- fail-closed decisions, entitlement expiry, and stable denial reasons;
+- repeat-read lockout;
+- ordered, idempotent subscription projection;
+- atomic full-snapshot replacement;
+- acknowledgement-safe local outbox behaviour; and
+- dry-run versus commissioned output intent.
+
+This is a public reference model, not a copy of private client source or field configuration.
+
+## Validate the repository
+
+```bash
+npm ci
+npm run validate
+npm run validate:dotnet
+```
+
+The Node validator compiles every schema, validates every synthetic fixture, verifies the PNG [integrity manifest](assets/manifest.json), resolves local Markdown links, checks the machine-readable [claim matrix](verification/claim-matrix.json), and rejects common secret/private-data patterns. CI runs the Node and .NET paths independently.
+
+## Repository map
 
 ```text
-assets/       six public-safe system frames
-contracts/    access-decision and event schemas
-examples/     controlled allowed and denied decisions
-scripts/      structural validator
-docs/         architecture and operating boundaries
+assets/       public-safe system frames and integrity manifest
+contracts/    provider-neutral JSON Schemas
+docs/         architecture, security, operations, migration, and verification notes
+examples/     synthetic contract fixtures
+verification/ machine-readable claim status and basis
+scripts/      repository validator
+src/          executable .NET 10 reference model
+tests/        behavioural tests for the critical controls
 ```
 
-[Architecture and failure boundaries](docs/architecture.md)
+## Detailed case study
+
+- [System case study](docs/case-study.md)
+- [Architecture and failure boundaries](docs/architecture.md)
+- [Customer account security](docs/customer-account-security.md)
+- [Subscription reconciliation](docs/subscription-reconciliation.md)
+- [Local edge and outbox](docs/local-edge-and-outbox.md)
+- [Field safety and commissioning](docs/field-safety-and-commissioning.md)
+- [Aurora migration](docs/aurora-migration.md)
+- [Verification matrix](docs/verification-matrix.md)
+- [Publication boundary](docs/publication-boundary.md)
+
+## Delivery boundary
+
+The hosted application, durable records, sandbox billing-event path, operator dashboard, local edge services, and output-intent controls are implemented. Physical scanner reads, beam state, PLC/CODESYS acknowledgement, and wash actuation remain separate onsite acceptance steps.
+
+The operational repository remains private because it contains client configuration, provider setup, device addressing, and field runbooks. This repository publishes architecture, contracts, synthetic fixtures, a reference implementation, behavioural tests, and selected screens only.

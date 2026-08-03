@@ -1,0 +1,29 @@
+{
+  "fixture": "synthetic",
+  "schema": "contracts/local-outbox.schema.json",
+  "schema_version": "1.0.0",
+  "cases": [
+    {
+      "message_id": "demo-outbox-001",
+      "aggregate_ref": "demo-decision-001",
+      "message_type": "decision_issued",
+      "sequence": 101,
+      "payload_sha256": "d7f20bc8e8231c8d86f069b6698ed9d89a9d6096a132ee3517fef43c9fb73899",
+      "created_at": "2026-07-30T02:00:01Z",
+      "delivery_attempts": 1,
+      "state": "pending",
+      "acknowledged_at": null
+    },
+    {
+      "message_id": "demo-outbox-002",
+      "aggregate_ref": "demo-decision-002",
+      "message_type": "decision_issued",
+      "sequence": 102,
+      "payload_sha256": "51872057e752bad8b9f9b3af33b33ef7050677be7a4249f0913d65dac7c797a3",
+      "created_at": "2026-07-30T02:01:01Z",
+      "delivery_attempts": 1,
+      "state": "acknowledged",
+      "acknowledged_at": "2026-07-30T02:01:02Z"
+    }
+  ]
+}

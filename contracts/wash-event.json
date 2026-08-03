@@ -1,20 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.smsystems.au/rfid/wash-event.schema.json",
   "title": "RFID wash event",
+  "description": "An observable event in the decision and local command path.",
   "type": "object",
   "required": [
     "event_id",
     "correlation_id",
     "event_type",
     "occurred_at",
-    "source"
+    "source",
+    "sequence"
   ],
   "properties": {
     "event_id": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^demo-event-[a-z0-9-]{3,80}$"
     },
     "correlation_id": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^demo-[a-z0-9-]{4,80}$"
     },
     "event_type": {
       "enum": [
@@ -34,6 +39,10 @@
     },
     "outcome": {
       "type": ["string", "null"]
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
     }
   },
   "additionalProperties": false

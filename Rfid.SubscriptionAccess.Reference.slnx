@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Rfid.ReferenceModel/Rfid.ReferenceModel.csproj" />
+  <Project Path="tests/Rfid.ReferenceModel.Tests/Rfid.ReferenceModel.Tests.csproj" />
+</Solution>

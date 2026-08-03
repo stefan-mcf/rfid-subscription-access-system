@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "statuses": ["validated", "demonstrated", "pending_onsite", "excluded"],
+  "claims": [
+    {
+      "id": "RFID-001",
+      "statement": "Unknown, inactive, repeated, busy, and unavailable states fail closed.",
+      "status": "validated",
+      "basis": [
+        "tests/Rfid.ReferenceModel.Tests/AccessDecisionEngineTests.cs",
+        "assets/06-operator-and-edge-access-decisions.png"
+      ]
+    },
+    {
+      "id": "RFID-002",
+      "statement": "Provider-neutral subscription events are projected in order and duplicate delivery is repeat-safe.",
+      "status": "validated",
+      "basis": [
+        "tests/Rfid.ReferenceModel.Tests/StateControlTests.cs",
+        "contracts/subscription-state-change.schema.json",
+        "assets/05-stripe-sandbox-billing-state.png"
+      ]
+    },
+    {
+      "id": "RFID-003",
+      "statement": "Customer plan, vehicle, billing, tag, and access states are represented separately.",
+      "status": "demonstrated",
+      "basis": [
+        "assets/02-vehicle-plan-selection.png",
+        "assets/03-vehicle-details-before-checkout.png",
+        "assets/04-customer-account-and-access-state.png"
+      ]
+    },
+    {
+      "id": "RFID-004",
+      "statement": "A versioned full snapshot replaces local tag state without retaining omitted tags.",
+      "status": "validated",
+      "basis": [
+        "tests/Rfid.ReferenceModel.Tests/StateControlTests.cs",
+        "contracts/tag-snapshot.schema.json"
+      ]
+    },
+    {
+      "id": "RFID-005",
+      "statement": "Local outbox enqueue and acknowledgement operations are repeat-safe.",
+      "status": "validated",
+      "basis": [
+        "tests/Rfid.ReferenceModel.Tests/StateControlTests.cs",
+        "contracts/local-outbox.schema.json"
+      ]
+    },
+    {
+      "id": "RFID-006",
+      "statement": "Dry-run and uncommissioned output intents do not permit actuation.",
+      "status": "validated",
+      "basis": [
+        "tests/Rfid.ReferenceModel.Tests/OutputIntentPlannerTests.cs",
+        "assets/08-wash-controls-outputs-disabled.png"
+      ]
+    },
+    {
+      "id": "RFID-007",
+      "statement": "Tag assignment and customer claim lookup are exposed through controlled operator workflows.",
+      "status": "demonstrated",
+      "basis": [
+        "assets/07-tag-assignment-and-claim-lookup.png"
+      ]
+    },
+    {
+      "id": "RFID-008",
+      "statement": "The hosted PostgreSQL workload was accepted on private Aurora Serverless v2 after migration checks.",
+      "status": "validated",
+      "basis": [
+        "assets/09-aurora-serverless-database-migration.png",
+        "docs/aurora-migration.md"
+      ]
+    },
+    {
+      "id": "RFID-009",
+      "statement": "Physical reader input, controller acknowledgement, and wash actuation require onsite acceptance.",
+      "status": "pending_onsite",
+      "basis": [
+        "docs/field-safety-and-commissioning.md",
+        "assets/01-subscription-to-access-decision.png"
+      ]
+    },
+    {
+      "id": "RFID-010",
+      "statement": "Live payments, approved pricing, client revenue, and long-term savings are outside the published claim boundary.",
+      "status": "excluded",
+      "basis": [
+        "docs/publication-boundary.md"
+      ]
+    }
+  ]
+}

@@ -1,18 +1,22 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.smsystems.au/rfid/access-decision.schema.json",
   "title": "RFID access decision",
+  "description": "A short-lived commercial eligibility decision. It is not a physical actuation acknowledgement.",
   "type": "object",
   "required": [
     "correlation_id",
     "tag_id",
     "decision",
     "reason",
+    "wash_program",
+    "valid_until",
     "decided_at"
   ],
   "properties": {
     "correlation_id": {
       "type": "string",
-      "minLength": 1
+      "pattern": "^demo-[a-z0-9-]{4,80}$"
     },
     "tag_id": {
       "type": "string",
@@ -45,5 +49,28 @@
       "format": "date-time"
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": { "const": "allow" }
+        }
+      },
+      "then": {
+        "properties": {
+          "reason": { "const": "active_subscription" },
+          "wash_program": { "type": "integer" },
+          "valid_until": { "type": "string", "format": "date-time" }
+        }
+      },
+      "else": {
+        "properties": {
+          "reason": { "not": { "const": "active_subscription" } },
+          "wash_program": { "type": "null" },
+          "valid_until": { "type": "null" }
+        }
+      }
+    }
+  ],
   "additionalProperties": false
 }

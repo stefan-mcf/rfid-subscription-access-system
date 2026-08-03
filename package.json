@@ -1,8 +1,18 @@
 {
   "name": "rfid-subscription-access-system",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
+  "description": "Public case study, interface contracts, and executable reference controls for a subscription-linked RFID access platform.",
   "scripts": {
-    "validate": "node scripts/validate-contracts.mjs"
+    "validate": "node scripts/validate-public-repository.mjs",
+    "validate:dotnet": "dotnet test Rfid.SubscriptionAccess.Reference.slnx --configuration Release",
+    "validate:all": "npm run validate && npm run validate:dotnet"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
   }
 }

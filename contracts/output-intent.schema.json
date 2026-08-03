@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.smsystems.au/rfid/output-intent.schema.json",
+  "title": "Bounded output intent",
+  "description": "A requested local output transition. It is distinct from a physical acknowledgement.",
+  "type": "object",
+  "required": [
+    "intent_id",
+    "correlation_id",
+    "wash_program",
+    "requested_at",
+    "expires_at",
+    "mode",
+    "field_commissioned",
+    "actuation_permitted",
+    "status",
+    "reason"
+  ],
+  "properties": {
+    "intent_id": {
+      "type": "string",
+      "pattern": "^demo-intent-[a-z0-9-]{3,80}$"
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^demo-[a-z0-9-]{4,80}$"
+    },
+    "wash_program": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 3
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "enum": ["dry_run", "live"]
+    },
+    "field_commissioned": {
+      "type": "boolean"
+    },
+    "actuation_permitted": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": ["pending", "acknowledged", "rejected", "suppressed"]
+    },
+    "reason": {
+      "enum": [
+        "eligible",
+        "decision_not_allowed",
+        "dry_run_only",
+        "field_not_commissioned",
+        "decision_expired",
+        "controller_busy",
+        "operator_mode_blocked"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "mode": { "const": "dry_run" } }
+      },
+      "then": {
+        "properties": {
+          "actuation_permitted": { "const": false },
+          "status": { "const": "suppressed" },
+          "reason": { "const": "dry_run_only" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "field_commissioned": { "const": false } }
+      },
+      "then": {
+        "properties": { "actuation_permitted": { "const": false } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "actuation_permitted": { "const": true } }
+      },
+      "then": {
+        "properties": {
+          "wash_program": { "type": "integer" },
+          "mode": { "const": "live" },
+          "field_commissioned": { "const": true },
+          "status": { "const": "pending" },
+          "reason": { "const": "eligible" }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

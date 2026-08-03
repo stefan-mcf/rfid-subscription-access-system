@@ -44,4 +44,4 @@ The executable [`SubscriptionProjection`](../src/Rfid.ReferenceModel/Subscriptio
 
 ## Sandbox boundary
 
-The published billing screens use provider sandbox mode and temporary A$1.00 test pricing. They establish checkout, subscription, invoice, lifecycle-event, and Billing Portal behaviour only. They do not establish live payments, production pricing approval, revenue, or client savings.
+The amount shown in the published billing screen is a temporary test price used only in provider sandbox mode. It is not commercial pricing. The screen establishes checkout, subscription, invoice, lifecycle-event, and Billing Portal behaviour only. It does not establish live payments, production pricing approval, revenue, or client savings.

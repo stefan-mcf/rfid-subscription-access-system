@@ -267,10 +267,12 @@ for (const relativePath of textFiles) {
   }
 }
 
+const disallowedPortfolioWord = new RegExp(`\\b${"pr" + "oof"}\\b`, "i");
+
 for (const relativePath of markdownFiles) {
   const content = markdownContent.get(relativePath);
   assert(!/\bTODO\b|\bTBD\b/.test(content), `${relativePath} contains unfinished copy`);
-  assert(!/\bproof\b/i.test(content), `${relativePath} contains disallowed portfolio wording`);
+  assert(!disallowedPortfolioWord.test(content), `${relativePath} contains disallowed portfolio wording`);
 }
 
 const sourceProject = await readUtf8("src/Rfid.ReferenceModel/Rfid.ReferenceModel.csproj");

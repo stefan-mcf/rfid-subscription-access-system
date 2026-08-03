@@ -1,0 +1,25 @@
+{
+  "fixture": "synthetic",
+  "schema": "contracts/rfid-read.schema.json",
+  "schema_version": "1.0.0",
+  "cases": [
+    {
+      "read_id": "demo-read-001",
+      "correlation_id": "demo-decision-001",
+      "tag_id": "A1B2C3D4",
+      "reader_ref": "reader-demo-entry-lane",
+      "observed_at": "2026-07-30T02:00:00Z",
+      "monotonic_sequence": 4101,
+      "signal_strength_dbm": -48
+    },
+    {
+      "read_id": "demo-read-002",
+      "correlation_id": "demo-decision-002",
+      "tag_id": "FFEEDDCC",
+      "reader_ref": "reader-demo-entry-lane",
+      "observed_at": "2026-07-30T02:01:00Z",
+      "monotonic_sequence": 4102,
+      "signal_strength_dbm": null
+    }
+  ]
+}

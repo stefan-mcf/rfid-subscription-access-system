@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.smsystems.au/rfid/local-outbox.schema.json",
+  "title": "Local outbox message",
+  "description": "A durable local message awaiting acknowledgement from an upstream receiver.",
+  "type": "object",
+  "required": [
+    "message_id",
+    "aggregate_ref",
+    "message_type",
+    "sequence",
+    "payload_sha256",
+    "created_at",
+    "delivery_attempts",
+    "state",
+    "acknowledged_at"
+  ],
+  "properties": {
+    "message_id": {
+      "type": "string",
+      "pattern": "^demo-outbox-[a-z0-9-]{3,80}$"
+    },
+    "aggregate_ref": {
+      "type": "string",
+      "pattern": "^demo-[a-z0-9-]{4,80}$"
+    },
+    "message_type": {
+      "enum": ["tag_read", "decision_issued", "output_intent", "command_result"]
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "payload_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "delivery_attempts": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "state": {
+      "enum": ["pending", "acknowledged", "dead_letter"]
+    },
+    "acknowledged_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "state": { "const": "acknowledged" } }
+      },
+      "then": {
+        "properties": { "acknowledged_at": { "type": "string", "format": "date-time" } }
+      },
+      "else": {
+        "properties": { "acknowledged_at": { "type": "null" } }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

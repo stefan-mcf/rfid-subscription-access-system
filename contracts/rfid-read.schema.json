@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.smsystems.au/rfid/rfid-read.schema.json",
+  "title": "Normalised RFID read",
+  "description": "A synthetic, provider-neutral tag observation emitted by a local reader adapter.",
+  "type": "object",
+  "required": [
+    "read_id",
+    "correlation_id",
+    "tag_id",
+    "reader_ref",
+    "observed_at",
+    "monotonic_sequence"
+  ],
+  "properties": {
+    "read_id": {
+      "type": "string",
+      "pattern": "^demo-read-[a-z0-9-]{3,80}$"
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^demo-[a-z0-9-]{4,80}$"
+    },
+    "tag_id": {
+      "type": "string",
+      "pattern": "^[A-F0-9]{8,32}$"
+    },
+    "reader_ref": {
+      "type": "string",
+      "pattern": "^reader-demo-[a-z0-9-]{1,40}$"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "monotonic_sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "signal_strength_dbm": {
+      "type": ["integer", "null"],
+      "minimum": -120,
+      "maximum": 0
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,8 +1,10 @@
 {
+  "fixture": "synthetic",
+  "schema": "contracts/access-decision.json",
   "schema_version": "1.0.0",
   "cases": [
     {
-      "correlation_id": "evt-001",
+      "correlation_id": "demo-decision-001",
       "tag_id": "A1B2C3D4",
       "decision": "allow",
       "reason": "active_subscription",
@@ -11,7 +13,7 @@
       "decided_at": "2026-07-30T02:00:00Z"
     },
     {
-      "correlation_id": "evt-002",
+      "correlation_id": "demo-decision-002",
       "tag_id": "FFEEDDCC",
       "decision": "deny",
       "reason": "unknown_tag",
@@ -20,7 +22,7 @@
       "decided_at": "2026-07-30T02:01:00Z"
     },
     {
-      "correlation_id": "evt-003",
+      "correlation_id": "demo-decision-003",
       "tag_id": "A1B2C3D4",
       "decision": "deny",
       "reason": "repeat_lockout",
@@ -29,7 +31,7 @@
       "decided_at": "2026-07-30T02:01:05Z"
     },
     {
-      "correlation_id": "evt-004",
+      "correlation_id": "demo-decision-004",
       "tag_id": "11223344",
       "decision": "deny",
       "reason": "field_path_unavailable",

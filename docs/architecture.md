@@ -1,57 +1,87 @@
 # Architecture and failure boundaries
 
+## Design rule
+
+Subscription state, access eligibility, output intent, command acknowledgement, and observed equipment state are separate records. Each transition has its own owner and failure mode.
+
 ## Components
 
-| Component | Responsibility |
-| --- | --- |
-| Customer web | Account verification, plans, per-vehicle subscriptions, checkout, and Billing Portal access |
-| Stripe sandbox | Temporary checkout, invoice, subscription, and signed lifecycle events |
-| AWS event broker | Ordered, duplicate-resistant subscription-event processing and exception handling |
-| Subscription API | Account, subscription, claim-code, billing-event, and webhook state |
-| Aurora PostgreSQL | Durable customer, subscription, tag, event, decision, and output-intent records |
-| Access decision API | Tag lookup, entitlement checks, repeat protection, and wash-program decisions |
-| Edge service | Local reader polling, decision requests, and buffered event delivery |
-| PLC bridge | Bounded command and acknowledgement interface |
-| Operator dashboard | Runtime status, tag management, decisions, events, and wash controls |
+| Component | Responsibility | Does not establish |
+| --- | --- | --- |
+| Customer web | Account verification, plan selection, per-vehicle state, checkout initiation, Billing Portal entry | Payment success without provider reconciliation |
+| Stripe sandbox | Temporary Checkout, invoice, subscription, and signed lifecycle events | Approved pricing or live revenue |
+| Ordered event path | Signature-gated, duplicate-resistant subscription processing | Local field availability |
+| Subscription API | Account, subscription, claim-code, billing-event, and webhook state | Physical machine state |
+| Aurora PostgreSQL | Durable customer, subscription, tag, event, decision, and intent records | Local command acknowledgement |
+| Access decision API | Tag lookup, entitlement checks, repeat protection, and short-lived decisions | Equipment movement |
+| Edge service | Reader normalisation, local snapshot, decision requests, lockout, and outbox | Customer billing ownership |
+| PLC bridge | Bounded command and acknowledgement interface | Commercial entitlement |
+| Operator dashboard | Runtime, tag management, decisions, events, modes, and output-intent visibility | Direct confirmation of wash completion |
 
-## Subscription sequence
+## Commercial state sequence
 
-1. A verified account selects a plan for a specific vehicle.
-2. The backend creates a Stripe sandbox Checkout session using temporary test pricing.
-3. Signed lifecycle events enter an ordered AWS processing path.
-4. Invalid signatures are rejected and repeated events do not advance state twice.
-5. Current subscription state is reconciled into PostgreSQL.
-6. Customer and operator surfaces read the same durable commercial state.
+```mermaid
+sequenceDiagram
+    participant C as Customer account
+    participant P as Stripe sandbox
+    participant B as Ordered event path
+    participant A as Subscription API
+    participant D as Aurora PostgreSQL
 
-## Access decision sequence
+    C->>A: Request checkout for owned vehicle
+    A->>P: Create sandbox checkout session
+    P-->>B: Signed lifecycle event
+    B->>B: Verify, deduplicate, order
+    B->>A: Apply lifecycle transition
+    A->>D: Reconcile current state and event receipt
+    D-->>C: Return explicit vehicle, plan, billing and tag states
+```
 
-1. The reader reports a normalised tag identifier to the local edge service.
-2. The edge service requests an access decision with a correlation ID.
-3. The API checks tag registration, subscription state, repeat protection, and system availability.
-4. An allowed response carries the wash program and a short validity window.
-5. The local command path checks operator mode, busy state, and request gates.
-6. Decision, command, and acknowledgement events remain separately observable.
+Provider event receipt and current state are separate. A repeated event can be acknowledged without applying the transition twice. An older sequence cannot overwrite a newer projection.
+
+## Access and command sequence
+
+```mermaid
+sequenceDiagram
+    participant R as RFID reader
+    participant E as Local edge service
+    participant A as Access decision API
+    participant O as Local outbox
+    participant P as PLC bridge
+    participant U as Operator view
+
+    R->>E: Normalised tag read
+    E->>A: Decision request with correlation ID
+    A-->>E: Short-lived allow or reason-coded deny
+    E->>O: Persist decision event
+    alt allowed and local gates pass
+        E->>P: Bounded output intent
+        P-->>E: Acknowledged or rejected
+        E->>O: Persist command result
+    else dry-run, busy, stale, or unavailable
+        E->>O: Persist suppressed intent
+    end
+    O-->>U: Deliver observable events, repeat-safe
+```
 
 ## Fail-closed outcomes
 
+- no current full snapshot;
 - unknown or unassigned tag;
 - inactive or unresolved subscription;
 - repeated read inside the lockout interval;
-- controller busy or command already active;
-- stale decision;
-- local dependency unavailable;
+- busy controller or active command;
+- expired decision;
+- unavailable local dependency; or
 - field path not commissioned for the selected mode.
 
-## Database migration boundary
+## Local-first boundary
 
-The hosted PostgreSQL workload moved from fixed RDS compute to private Aurora Serverless v2. Migration acceptance covered record-count parity, application read and write checks, backup creation, observed zero-ACU idle state, post-retirement resume behaviour, and retirement of the former RDS instance.
+Customer and operator application state can run in AWS. Reader timing, the local entitlement snapshot, repeat protection, intent persistence, and the controller bridge stay local to the site. Loss of a cloud connection must not turn into an implicit allow, while loss of upstream event delivery must not erase the local event.
 
-The migration records support the observed operating state only. They do not establish final long-term savings.
+## Related detail
 
-## Hosted and onsite separation
-
-Customer and operator application state can run in AWS, but the reader-to-controller path remains local to the site. The local API and edge process cannot be replaced with a public cloud round trip for physical command timing.
-
-## Publication boundary
-
-Device IP addresses, VPN routes, access tokens, live customer data, payment identifiers, tag values, client configuration, and field runbooks are excluded. Stripe material is sandbox-only. Live payments, approved production pricing, client revenue, and physical equipment activation are not claimed.
+- [Subscription reconciliation](subscription-reconciliation.md)
+- [Local edge and outbox](local-edge-and-outbox.md)
+- [Field safety and commissioning](field-safety-and-commissioning.md)
+- [Publication boundary](publication-boundary.md)

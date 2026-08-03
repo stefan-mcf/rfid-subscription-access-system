@@ -1,0 +1,31 @@
+{
+  "fixture": "synthetic",
+  "schema": "contracts/output-intent.schema.json",
+  "schema_version": "1.0.0",
+  "cases": [
+    {
+      "intent_id": "demo-intent-001",
+      "correlation_id": "demo-decision-001",
+      "wash_program": 2,
+      "requested_at": "2026-07-30T02:00:02Z",
+      "expires_at": "2026-07-30T02:00:15Z",
+      "mode": "dry_run",
+      "field_commissioned": false,
+      "actuation_permitted": false,
+      "status": "suppressed",
+      "reason": "dry_run_only"
+    },
+    {
+      "intent_id": "demo-intent-002",
+      "correlation_id": "demo-decision-004",
+      "wash_program": 1,
+      "requested_at": "2026-07-30T02:02:01Z",
+      "expires_at": "2026-07-30T02:02:15Z",
+      "mode": "live",
+      "field_commissioned": false,
+      "actuation_permitted": false,
+      "status": "suppressed",
+      "reason": "field_not_commissioned"
+    }
+  ]
+}

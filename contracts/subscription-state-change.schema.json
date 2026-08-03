@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.smsystems.au/rfid/subscription-state-change.schema.json",
+  "title": "Subscription state change",
+  "description": "An ordered, provider-neutral subscription lifecycle event after signature validation.",
+  "type": "object",
+  "required": [
+    "event_id",
+    "provider_event_ref",
+    "account_ref",
+    "vehicle_ref",
+    "state",
+    "effective_at",
+    "recorded_at",
+    "event_sequence"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^demo-sub-event-[a-z0-9-]{3,80}$"
+    },
+    "provider_event_ref": {
+      "type": "string",
+      "pattern": "^provider-demo-[a-z0-9-]{3,80}$"
+    },
+    "account_ref": {
+      "type": "string",
+      "pattern": "^account-demo-[a-z0-9-]{3,40}$"
+    },
+    "vehicle_ref": {
+      "type": "string",
+      "pattern": "^vehicle-demo-[a-z0-9-]{3,40}$"
+    },
+    "state": {
+      "enum": [
+        "pending_checkout",
+        "active",
+        "past_due",
+        "paused",
+        "cancelled",
+        "incomplete"
+      ]
+    },
+    "effective_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "event_sequence": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}

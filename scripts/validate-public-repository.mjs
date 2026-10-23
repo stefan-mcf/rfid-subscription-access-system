@@ -173,7 +173,7 @@ const claimMatrix = await readJson("verification/claim-matrix.json");
 assert.equal(claimMatrix.schema_version, "1.0.0", "Claim matrix must declare schema_version=1.0.0");
 assert.deepEqual(
   claimMatrix.statuses,
-  ["validated", "demonstrated", "pending_onsite", "excluded"],
+  ["validated", "demonstrated", "owner_confirmed", "excluded"],
   "Claim matrix status vocabulary changed"
 );
 assert(Array.isArray(claimMatrix.claims) && claimMatrix.claims.length >= 10, "Claim matrix needs at least ten bounded claims");

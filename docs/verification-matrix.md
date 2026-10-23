@@ -4,7 +4,7 @@
 
 - **Validated:** exercised by an automated test, schema check, or direct controlled readback.
 - **Demonstrated:** visible in a controlled application or sandbox surface.
-- **Pending onsite:** requires the actual reader, controller, or equipment at the installation.
+- **Owner confirmed:** current delivery status supplied by the project owner, separate from public automated/physical receipts.
 - **Excluded:** intentionally outside the public or commercial claim boundary.
 
 ## Matrix
@@ -23,15 +23,14 @@
 | Sandbox billing lifecycle | Provider sandbox screens and lifecycle records | Demonstrated | Temporary test price only |
 | Operator access and tag controls | Controlled application screens | Demonstrated | Does not establish physical movement |
 | Aurora migration | Runtime, data, backup, idle, resume, and retirement checks | Validated | Observation at acceptance time |
-| Reader and scanner input | Onsite read test | Pending onsite | Physical hardware required |
-| Beam and busy signals | Controller input test | Pending onsite | Physical I/O required |
-| PLC/CODESYS acknowledgement | End-to-end command test | Pending onsite | Field network required |
-| Wash actuation | Observed onsite cycle | Pending onsite | Physical acceptance required |
+| Delivered reader/controller system | Project-owner confirmation recorded 24 October 2026 | Owner confirmed | No new physical receipt in this public update |
 | Live customer charging | Production payment record | Excluded | Sandbox only |
 | Approved production pricing | Client commercial approval | Excluded | Not claimed |
 | Client revenue or savings | Client-owned business records | Excluded | Not claimed |
 
 ## Repository validation
+
+See [current delivery status](current-status.md) for the owner confirmation and the dated publication snapshot. The former pending rows are historical, not current outstanding work.
 
 `npm run validate` checks:
 

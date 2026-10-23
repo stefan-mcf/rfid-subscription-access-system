@@ -38,4 +38,4 @@ Missing snapshot, stale decision, unknown state, unavailable controller, expired
 
 ## Public acceptance status
 
-The hosted software, event records, operator modes, reference decision controls, and dry-run output-intent path are represented here. Physical scanner reads, beam state, PLC/CODESYS acknowledgement, and wash actuation remain onsite acceptance items.
+The project owner has confirmed that the delivered system works as intended. See [current delivery status](current-status.md) for the recorded confirmation and its distinction from the historical public verification package. The acceptance layers above remain design and operating controls, rather than a statement of outstanding work.

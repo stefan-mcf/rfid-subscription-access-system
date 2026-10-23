@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "statuses": ["validated", "demonstrated", "pending_onsite", "excluded"],
+  "statuses": ["validated", "demonstrated", "owner_confirmed", "excluded"],
   "claims": [
     {
       "id": "RFID-001",
@@ -77,11 +77,10 @@
     },
     {
       "id": "RFID-009",
-      "statement": "Physical reader input, controller acknowledgement, and wash actuation require onsite acceptance.",
-      "status": "pending_onsite",
+      "statement": "The project owner confirms that the delivered system works as intended; new physical acceptance receipts are not part of this public update.",
+      "status": "owner_confirmed",
       "basis": [
-        "docs/field-safety-and-commissioning.md",
-        "assets/01-subscription-to-access-decision.png"
+        "docs/current-status.md"
       ]
     },
     {

@@ -96,6 +96,6 @@ Platform screens and runtime readbacks establish the hosted and sandbox surfaces
 
 ## Current boundary
 
-The hosted application, durable data, sandbox billing lifecycle, operator controls, edge design, and reference state controls are complete enough to demonstrate the integrated system. Final reader placement, scanner reads, beam state, controller acknowledgement, and wash actuation require onsite acceptance.
+The project owner has confirmed that the delivered system works as intended. The [current status record](current-status.md) supersedes the earlier commissioning-pending summary while retaining the distinction between owner confirmation, public reference tests and historical site evidence.
 
 [Publication boundary](publication-boundary.md)
